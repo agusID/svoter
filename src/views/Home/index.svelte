@@ -281,6 +281,7 @@
     top: 0;
     left: 0;
   }
+
   .voted-info__wrapper {
     display: flex;
     justify-content: center;
@@ -331,6 +332,7 @@
     text-align: center;
     margin-top: 10px;
   }
+
 </style>
 {#if !isVoted}
   <img class="background" src="{getImageSource('bg.svg')}" alt="background" />

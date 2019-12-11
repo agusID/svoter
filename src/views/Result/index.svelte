@@ -111,6 +111,22 @@
     top: 0;
     margin: 0 auto;
   }
+
+  .zooming {
+    animation: zooming 1s ease-out;
+  }
+
+  @keyframes zooming {
+    from {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    to {
+      transform: scale(1)
+    }
+  }
 </style>
 
 <div class="container">
@@ -127,7 +143,7 @@
             <div class="nominee__item-name">{item.name}</div>
             <div class="nominee__item-position">{item.position}</div>
             <div class="btn-group">
-              <div class="vote-count">{totalCount[index]}</div>
+              <div class="vote-count" class:zooming={nominees[index].count === totalCount[index]}>{totalCount[index]}</div>
               <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
             </div>
           </div>
