@@ -1,7 +1,6 @@
 <script>
   import Cookies from 'universal-cookie'
   import { database } from '@config/firebase'
-  import 'firebase/database'
   import { fade, fly } from 'svelte/transition'
   import { osFilter, getImageSource, cutText, sorted } from './utils'
   import { Loader } from '@components'
