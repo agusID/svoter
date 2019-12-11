@@ -132,6 +132,7 @@
     text-align: center;
     margin-top: 30px;
     font-size: 27.4px;
+    user-select: none;
   }
 
   .armour {
@@ -207,6 +208,7 @@
     width: 100%;
     height: 100vh;
     top: 0;
+    user-select: none;
   }
 
   .modal {
@@ -224,6 +226,7 @@
     text-align: center;
     width: 290.3px;
     height: 200px;
+    user-select: none;
   }
 
   .modal-confirm {
@@ -235,6 +238,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    user-select: none;
   }
 
   .modal-confirm__question {
@@ -257,6 +261,7 @@
 
   .btn-group .btn {
     margin: 10px;
+    user-select: none;
   }
 
   .btn-group .btn:active {
@@ -282,6 +287,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    user-select: none;
   }
 
   .voted-info__picture {
