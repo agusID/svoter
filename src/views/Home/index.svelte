@@ -1,23 +1,53 @@
 <script>
-  // import { username, hasKey } from '@stores';
+  import Cookies from 'universal-cookie'
   import { database } from '@config/firebase'
   import 'firebase/database'
   import { fade, fly } from 'svelte/transition'
   import { osFilter, getImageSource, cutText, sorted } from './utils'
   import { Loader } from '@components'
+
+  /**
+   * @return {String}
+   */
+  const getDeviceId = () => {
+    const u =
+      Date.now().toString(16) +
+      Math.random().toString(16) +
+      '0'.repeat(16)
+    const deviceId = [
+      u.substr(0, 8),
+      u.substr(8, 4),
+      `4000-8${u.substr(13, 3)}`,
+      u.substr(16, 12),
+    ].join('-')
+
+    return deviceId
+  }
+
+  const cookies = new Cookies()
+  
   
   const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
   const MAX_NOMINEES = 3
-
+  
   let nominess = null
-
   let isModal = false
-  let isVoted = false
   let nomineeSelected = {
     unique_id: null,
     name: null,
     image: null,
+  }
+
+  let svolterCookie = cookies.get('svolter') && JSON.parse(window.atob(cookies.get('svolter')))
+  let isVoted = svolterCookie ? true : false
+
+  if (isVoted) {
+    nomineeSelected = {
+      unique_id: null,
+      name: svolterCookie.name,
+      image: svolterCookie.image,
+    }
   }
 
   function handleVote(id, name, image) {
@@ -55,6 +85,14 @@
 
       isModal = false
       isVoted = true
+
+      const cookieData = {
+        id: getDeviceId(),
+        name: nomineeSelected.name,
+        image: nomineeSelected.image
+      }
+
+      cookies.set('svolter', window.btoa(JSON.stringify(cookieData)), { path: '/' })
     }
 
   }
