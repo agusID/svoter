@@ -153,6 +153,8 @@ function webpackConfig(environment) {
         '@config': path.resolve(__dirname, 'src/config'),
         '@stores': path.resolve(__dirname, 'src/stores'),
         '@assets': path.resolve(__dirname, 'src/assets'),
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@helpers': path.resolve(__dirname, 'src/helpers'),
       },
       extensions: ['.mjs', '.ts', '.js', '.svelte']
     }

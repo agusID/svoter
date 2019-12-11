@@ -4,6 +4,7 @@
   import 'firebase/database'
   import { fade } from 'svelte/transition'
   import { osFilter, getImageSource, cutText, sorted } from './utils'
+  import { Loader } from '@components'
   
   const crowns = ['gold.png', 'silver.png', 'bronze.png']
   let temp = []
@@ -97,6 +98,18 @@
 
   .armour {
     padding: 50px 35px;
+  }
+
+  .loader-container { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    margin: 0 auto;
   }
 
   .nominee__item {
@@ -254,20 +267,24 @@
     </div>
     <div class="armour">
       {#if nominess}
-        {#each nominess as {unique_id, name, position, image}}
-          <div class="nominee__item">
-            <div class="nominee__item-picture-wrapper">
-              <img src={image} alt={name} class="nominee__item-picture" />
-              <img on:click={() => handleVote(unique_id, name, image)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
+        <div transition:fade={{duration: 200}}>        
+          {#each nominess as {unique_id, name, position, image}}
+            <div class="nominee__item">
+              <div class="nominee__item-picture-wrapper">
+                <img src={image} alt={name} class="nominee__item-picture" />
+                <img on:click={() => handleVote(unique_id, name, image)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
+              </div>
+              <div class="nominee__item-info">
+                <div class="nominee__item-name">{name}</div>
+                <div class="nominee__item-position">{position}</div>
+              </div>
             </div>
-            <div class="nominee__item-info">
-              <div class="nominee__item-name">{name}</div>
-              <div class="nominee__item-position">{position}</div>
-            </div>
-          </div>
-        {/each}
+          {/each}
+        </div>
       {:else}
-        Please wait...
+        <div class="loader-container">
+          <Loader />
+        </div>
       {/if}
     </div>
   </div>
