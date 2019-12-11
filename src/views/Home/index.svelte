@@ -28,10 +28,16 @@
   ]
 
   let isModal = false
-  let isVoted = true
+  let isVoted = false
+  let nomineeSelected = {
+    name: null,
+    image: null,
+  }
 
-  function handleVote() {
+  function handleVote(name) {
     isModal = true
+    nomineeSelected.name = name
+    nomineeSelected.image = ''
   }
 
   function handleSubmit() {
@@ -62,7 +68,7 @@
 
   .helmet {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 30px;
     font-size: 27.4px;
   }
 
@@ -173,9 +179,34 @@
     top: 0;
     left: 0;
   }
+
+  .voted-info__wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .voted-info__picture {
+    width: 229.4px;
+    height: 229.4px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 20px 30px #f1c40f;
+  }
+
+  .btn-empty {
+    margin-top: -20px;
+  }
+
+  .voted-info__desc {
+    text-align: center;
+    margin-top: 10px;
+  }
 </style>
 {#if !isVoted}
-  <img class="background" src="{getImageSource('bg.svg').default}" alt="background" />
+  <img class="background" src="{getImageSource('bg.svg')}" alt="background" />
   <div class="container">
     <div class="helmet">
       RALALI UNSUNG HERO 2019 NOMINEE
@@ -185,7 +216,7 @@
       <div class="nominee__item">
         <div class="nominee__item-picture-wrapper">
           <div class="nominee__item-picture"></div>
-          <img on:click={handleVote} class="btn-vote" src="{getImageSource('btn-vote.png').default}" alt="vote" />
+          <img on:click={() => handleVote(name)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
         </div>
         <div class="nominee__item-info">
           <div class="nominee__item-name">{name}</div>
@@ -196,9 +227,20 @@
     </div>
   </div>
 {:else}
-  <img class="background" src="{getImageSource('bg-voted.svg').default}" alt="background" />
+  <img class="background" src="{getImageSource('bg-voted.svg')}" alt="background" />
   <div class="container">
-  
+    <div class="helmet">
+      RALALI<br />UNSUNG HERO<br/>2019
+    </div>
+    <div class="armour">
+      <div class="voted-info">
+        <div class="voted-info__wrapper">
+          <div class="voted-info__picture"></div>
+          <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
+        </div>
+        <div class="voted-info__desc">Thank you for choosing Ralali Unsung Hero 2019</div>
+      </div>
+    </div>
   </div>
 {/if}
 
@@ -206,15 +248,15 @@
   <div class="modal" transition:fade={{duration: 200}}>
     <div class="modal-popup">
       <div class="modal-confirm">
-        <div class="modal-confirm__question">Apakah anda yakin ingin memillih</div>
-        <div class="modal-confirm__nominee">NAMA NOMINEE</div>
-        <div class="modal-confirm__question">sebagai unsung hero 2019?</div>
+        <div class="modal-confirm__question">Are you choosing</div>
+        <div class="modal-confirm__nominee">{nomineeSelected.name}</div>
+        <div class="modal-confirm__question">as unsung hero 2019?</div>
       </div>
       <div class="btn-group">
-        <img on:click={handleSubmit} class="btn" src="{getImageSource('btn-yes.svg').default}" alt="bg-yes" />
-        <img on:click={handleClose} class="btn" src="{getImageSource('btn-no.svg').default}" alt="bg-no" />
+        <img on:click={handleSubmit} class="btn" src="{getImageSource('btn-yes.svg')}" alt="bg-yes" />
+        <img on:click={handleClose} class="btn" src="{getImageSource('btn-no.svg')}" alt="bg-no" />
       </div>
-      <img class="popup-background" src="{getImageSource('bg-popup.svg').default}" alt="bg-popup" />
+      <img class="popup-background" src="{getImageSource('bg-popup.svg')}" alt="bg-popup" />
     </div>
   </div>
 {/if}

@@ -2,7 +2,7 @@
  * @param {string} filename 
  */
 export function getImageSource(filename){
-  return require(`@assets/images/${filename}`)
+  return require(`@assets/images/${filename}`).default
 }
 
 /**
