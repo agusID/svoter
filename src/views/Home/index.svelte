@@ -113,6 +113,7 @@
   }
 
   .nominee__item {
+    user-select: none;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -131,15 +132,23 @@
     border-radius: 50%;
     height: 100px;
     width: 100px;
+    user-select: none;
   }
 
   .btn-vote {
+    user-select: none;
     margin: 0 auto;
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+  }
+
+  .btn-vote:active{
+    transform: scale(0.9)
   }
 
   .nominee__item-info {
@@ -157,6 +166,8 @@
 
   .background {
     position: absolute;
+    width: 100%;
+    height: 100vh;
     top: 0;
   }
 
@@ -210,6 +221,10 @@
     margin: 10px;
   }
 
+  .btn-group .btn:active {
+    transform: scale(0.9)
+  }
+
   .popup-background {
     position: absolute;
     top: 0;
@@ -248,15 +263,13 @@
     padding: 20px 0;
   }
 
-  .btn-empty {
-    position: absolute;
-    left: 0;
-    right: 0;
+  .btn-empty:active{
+    transform: scale(0.9)
   }
 
   .voted-info__desc {
     text-align: center;
-    margin-top: 80px;
+    margin-top: 10px;
   }
 </style>
 {#if !isVoted}
