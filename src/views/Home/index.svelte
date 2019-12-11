@@ -1,7 +1,8 @@
 <script>
   // import { navigateTo } from 'svero'
   // import { username, hasKey } from '@stores';
-  // import { database } from '@config/firebase'
+  import { database } from '@config/firebase'
+  import 'firebase/database'
   import { fade } from 'svelte/transition'
   import { osFilter, getImageSource, cutText, sorted } from './utils'
   
@@ -9,45 +10,68 @@
   let temp = []
   const MAX_NOMINEES = 3
 
-  let nominess = [
-    {
-      name: 'NOMINEE 1',
-      position: 'JABATAN',
-      image: ''
-    },
-    {
-      name: 'NOMINEE 2',
-      position: 'JABATAN',
-      image: ''
-    },
-    {
-      name: 'NOMINEE 3',
-      position: 'JABATAN',
-      image: ''
-    }
-  ]
+  let nominess = null
 
   let isModal = false
   let isVoted = false
   let nomineeSelected = {
+    unique_id: null,
     name: null,
     image: null,
   }
 
-  function handleVote(name) {
+  function handleVote(id, name) {
     isModal = true
+    nomineeSelected.unique_id = id
     nomineeSelected.name = name
     nomineeSelected.image = ''
   }
 
+  function getCount(ref) {
+    return ref.collection('nominees').get().then(snapshot => {
+      let total_count = 0;
+      snapshot.forEach(doc => {
+        total_count += doc.data().count
+      })
+
+      return total_count
+    })
+  }
+
   function handleSubmit() {
-    isModal = false
-    isVoted = true
+    let currValue = null
+    database.ref(`nominees/${nomineeSelected.unique_id}`)
+      .on('value', function(snapshot) {
+        currValue = snapshot.val().count + 1
+      }, error => {
+        console.log(`The read failed: ${error.code}`);
+      })
+
+    if (currValue) {
+      database
+        .ref()
+        .child(`nominees/${nomineeSelected.unique_id}`)
+        .update({ count: currValue })
+
+      isModal = false
+      isVoted = true
+    }
+
   }
 
   function handleClose() {
     isModal = false
   }
+
+  // retrieve data
+  let usersRef = database.ref('nominees')
+  usersRef.on('value', function(snapshot) {
+    nominess = []
+    snapshot.forEach(function(childSnapshot) {
+      let childData = childSnapshot.val()
+      nominess = [...nominess, childData]
+    })
+  })
 
 </script>
 <style>
@@ -230,18 +254,22 @@
       RALALI UNSUNG HERO 2019 NOMINEE
     </div>
     <div class="armour">
-      {#each nominess as {name, position, image}}
-      <div class="nominee__item">
-        <div class="nominee__item-picture-wrapper">
-          <div class="nominee__item-picture"></div>
-          <img on:click={() => handleVote(name)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
-        </div>
-        <div class="nominee__item-info">
-          <div class="nominee__item-name">{name}</div>
-          <div class="nominee__item-position">{position}</div>
-        </div>
-      </div>
-      {/each}
+      {#if nominess}
+        {#each nominess as {unique_id, name, position, image}}
+          <div class="nominee__item">
+            <div class="nominee__item-picture-wrapper">
+              <div class="nominee__item-picture"></div>
+              <img on:click={() => handleVote(unique_id, name)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
+            </div>
+            <div class="nominee__item-info">
+              <div class="nominee__item-name">{name}</div>
+              <div class="nominee__item-position">{position}</div>
+            </div>
+          </div>
+        {/each}
+      {:else}
+        Please wait...
+      {/if}
     </div>
   </div>
 {:else}

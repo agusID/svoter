@@ -2,11 +2,11 @@ import * as firebase from 'firebase/app'
 import 'firebase/database'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB33dEbf4_KpAWvqg3efOT6iFe4rwKuXk8",
-  authDomain: "svelte-flappy-bird.firebaseapp.com",
-  databaseURL: "https://svelte-flappy-bird.firebaseio.com",
-  projectId: "svelte-flappy-bird",
-  appId: "1:717567582978:web:2d5f652fe7680172"
+  apiKey: "AIzaSyBT67-cThnTNj9V6LNhyPhWU1lf1l4VCK4",
+  authDomain: "qimol-ralali.firebaseapp.com",
+  databaseURL: "https://qimol-ralali.firebaseio.com",
+  projectId: "qimol-ralali",
+  appId: "1:352043315675:web:ecbf291dd1d8f8be"
 }
 
 firebase.initializeApp(firebaseConfig)
