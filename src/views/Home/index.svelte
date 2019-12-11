@@ -231,6 +231,13 @@
     left: 0;
   }
 
+  .hotspot {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   .voted-info__wrapper {
     display: flex;
     justify-content: center;
@@ -345,6 +352,7 @@
       </div>
       <img class="popup-background" src="{getImageSource('bg-popup.svg')}" alt="bg-popup" />
     </div>
+    <div on:click={() => isModal = false} class="hotspot"></div>
   </div>
 {/if}
 
