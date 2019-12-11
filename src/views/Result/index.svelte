@@ -4,15 +4,28 @@
   import { fade } from 'svelte/transition'
   import { database } from '@config/firebase'
 
-  let nominess = []
+  let nominees = []
   let usersRef = database.ref('nominees')
   usersRef.on('value', function(snapshot) {
-    nominess = []
+    nominees = []
     snapshot.forEach(function(childSnapshot) {
       let childData = childSnapshot.val()
-      nominess = [...nominess, childData]
+      nominees = [...nominees, childData]
     })
   })
+
+  let totalCount = [0, 0, 0]
+
+  $: nominees.length > 0 && setInterval(counter, 500)
+
+  function counter() {
+    if (nominees[0].count > totalCount[0])
+      totalCount[0] = totalCount[0] + 1
+    if (nominees[1].count > totalCount[1])
+      totalCount[1] = totalCount[1] + 1
+    if (nominees[2].count > totalCount[2])
+      totalCount[2] = totalCount[2] + 1
+  }
 </script>
 
 <style>
@@ -95,13 +108,13 @@
       RALALI UNSUNG HERO 2019 NOMINEE
     </div>
     <div class="armour" transition:fade={{duration: 200}}>      
-      {#each nominess as {unique_id, name, position, image}}
+      {#each nominees as item, index}
         <div class="nominee__item">
-          <img src={image} alt={name} class="nominee__item-picture" />
-          <div class="nominee__item-name">{name}</div>
-          <div class="nominee__item-position">{position}</div>
+          <img src={item.image} alt={item.name} class="nominee__item-picture" />
+          <div class="nominee__item-name">{item.name}</div>
+          <div class="nominee__item-position">{item.position}</div>
           <div class="btn-group">
-            <div class="vote-count">{1000}</div>
+            <div class="vote-count">{totalCount[index]}</div>
             <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
           </div>
         </div>
