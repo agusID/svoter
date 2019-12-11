@@ -1,5 +1,4 @@
 <script>
-  // import { navigateTo } from 'svero'
   // import { username, hasKey } from '@stores';
   import { database } from '@config/firebase'
   import 'firebase/database'
@@ -20,11 +19,11 @@
     image: null,
   }
 
-  function handleVote(id, name) {
+  function handleVote(id, name, image) {
     isModal = true
     nomineeSelected.unique_id = id
     nomineeSelected.name = name
-    nomineeSelected.image = ''
+    nomineeSelected.image = image
   }
 
   function getCount(ref) {
@@ -258,8 +257,8 @@
         {#each nominess as {unique_id, name, position, image}}
           <div class="nominee__item">
             <div class="nominee__item-picture-wrapper">
-              <div class="nominee__item-picture"></div>
-              <img on:click={() => handleVote(unique_id, name)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
+              <img src={image} alt={name} class="nominee__item-picture" />
+              <img on:click={() => handleVote(unique_id, name, image)} class="btn-vote" src="{getImageSource('btn-vote.png')}" alt="vote" />
             </div>
             <div class="nominee__item-info">
               <div class="nominee__item-name">{name}</div>
@@ -281,7 +280,7 @@
     <div class="armour">
       <div class="voted-info">
         <div class="voted-info__wrapper">
-          <div class="voted-info__picture"></div>
+          <img src={nomineeSelected.image} alt={nomineeSelected.name} class="voted-info__picture"/>
           <div class="voted-info-group">
             <div class="voted-info__name">{nomineeSelected.name}</div>
             <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
