@@ -2,7 +2,7 @@
   // import { username, hasKey } from '@stores';
   import { database } from '@config/firebase'
   import 'firebase/database'
-  import { fade } from 'svelte/transition'
+  import { fade, fly } from 'svelte/transition'
   import { osFilter, getImageSource, cutText, sorted } from './utils'
   import { Loader } from '@components'
   
@@ -324,7 +324,7 @@
 
 {#if isModal}
   <div class="modal" transition:fade={{duration: 200}}>
-    <div class="modal-popup">
+    <div class="modal-popup" transition:fly={{y: -10}}>
       <div class="modal-confirm">
         <div class="modal-confirm__question">Are you choosing</div>
         <div class="modal-confirm__nominee">{nomineeSelected.name}</div>
