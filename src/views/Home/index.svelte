@@ -244,7 +244,16 @@
     height: 229.4px;
     background-color: #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 20px 30px #f1c40f;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px 10px #f1c40f;
+    }
+    to {
+      box-shadow: 0 0 20px 30px #f1c40f;
+    }
   }
 
   .voted-info-group {
