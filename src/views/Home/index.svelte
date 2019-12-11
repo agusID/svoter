@@ -196,13 +196,31 @@
     box-shadow: 0 0 20px 30px #f1c40f;
   }
 
-  .btn-empty {
+  .voted-info-group {
     margin-top: -20px;
+    position: relative;
+    width: 100%;
+    display: block;
+  }
+
+  .voted-info__name {
+    font-size: 25px;
+    position: absolute;
+    z-index: 100;
+    text-align: center;
+    width: 100%;
+    padding: 20px 0;
+  }
+
+  .btn-empty {
+    position: absolute;
+    left: 0;
+    right: 0;
   }
 
   .voted-info__desc {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 80px;
   }
 </style>
 {#if !isVoted}
@@ -236,9 +254,12 @@
       <div class="voted-info">
         <div class="voted-info__wrapper">
           <div class="voted-info__picture"></div>
-          <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
+          <div class="voted-info-group">
+            <div class="voted-info__name">{nomineeSelected.name}</div>
+            <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
+          </div>
+          <div class="voted-info__desc">Thank you for choosing Ralali Unsung Hero 2019</div>
         </div>
-        <div class="voted-info__desc">Thank you for choosing Ralali Unsung Hero 2019</div>
       </div>
     </div>
   </div>
