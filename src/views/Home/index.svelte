@@ -148,6 +148,7 @@
     left: 0;
     top: 0;
     margin: 0 auto;
+    z-index: 999;
   }
 
   .nominee__item {

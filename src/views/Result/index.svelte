@@ -3,8 +3,9 @@
   import { getImageSource } from '../Home/utils'
   import { fade } from 'svelte/transition'
   import { database } from '@config/firebase'
+  import { Loader } from '@components'
 
-  let nominees = []
+  let nominees = null
   let usersRef = database.ref('nominees')
   usersRef.on('value', function(snapshot) {
     nominees = []
@@ -16,7 +17,7 @@
 
   let totalCount = [0, 0, 0]
 
-  $: nominees.length > 0 && setInterval(counter, 500)
+  $: nominees && (nominees.length > 0 && setInterval(counter, 500))
 
   function counter() {
     if (nominees[0].count > totalCount[0])
@@ -99,6 +100,17 @@
     position: absolute;
   }
 
+  .loader-container { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    margin: 0 auto;
+  }
 </style>
 
 <div class="container">
@@ -107,18 +119,24 @@
     <div class="helmet">
       RALALI UNSUNG HERO 2019 NOMINEE
     </div>
-    <div class="armour" transition:fade={{duration: 200}}>      
-      {#each nominees as item, index}
-        <div class="nominee__item">
-          <img src={item.image} alt={item.name} class="nominee__item-picture" />
-          <div class="nominee__item-name">{item.name}</div>
-          <div class="nominee__item-position">{item.position}</div>
-          <div class="btn-group">
-            <div class="vote-count">{totalCount[index]}</div>
-            <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
+    {#if nominees}
+      <div class="armour" transition:fade={{duration: 200}}>      
+        {#each nominees as item, index}
+          <div class="nominee__item">
+            <img src={item.image} alt={item.name} class="nominee__item-picture" />
+            <div class="nominee__item-name">{item.name}</div>
+            <div class="nominee__item-position">{item.position}</div>
+            <div class="btn-group">
+              <div class="vote-count">{totalCount[index]}</div>
+              <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
+        {/each}
+      </div>
+    {:else}
+      <div class="loader-container">
+        <Loader />
+      </div>
+    {/if}
   </div>
 </div>
