@@ -17,7 +17,12 @@
 
   let totalCount = ['?', '?', '?']
   let isStart = false
-  let isCountOver = false
+  let isCountOver = true
+  let nomineeSelected = {
+    unique_id: null,
+    name: null,
+    image: null,
+  }
 
   function counter() {
     if (nominees[0].count > totalCount[0])
@@ -144,6 +149,58 @@
       transform: scale(1)
     }
   }
+
+  .voted-info__wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    user-select: none;
+    margin-top: 30px;
+  }
+
+  .voted-info__picture {
+    width: 300px;
+    height: 300px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 10px 10px #f1c40f;
+    }
+    to {
+      box-shadow: 0 0 20px 30px #f1c40f;
+    }
+  }
+
+  .voted-info-group {
+    margin-top: -40px;
+    position: relative;
+    width: 100%;
+    display: block;
+  }
+
+  .voted-info__name {
+    font-size: 25px;
+    position: absolute;
+    z-index: 100;
+    text-align: center;
+    width: 100%;
+    padding: 30px 0;
+  }
+
+  .btn-empty{
+    width: 400px;
+  }
+
+  .voted-info__desc {
+    text-align: center;
+    margin-top: 10px;
+  }
 </style>
 {#if !isCountOver}
   <div class="container">
@@ -175,11 +232,23 @@
   </div>
 {:else}
   <div class="container">
-    <img transition:fade class="background" src={getImageSource('bg-desktop-over.svg')} alt="background" />
+    <img transition:fly={{delay: 250, y: 50}} class="background" src={getImageSource('bg-desktop-over.svg')} alt="background" />
     <div class="content">
       <div class="helmet" transition:fly={{y: 80}}>
         RALALI UNSUNG HERO 2019
       </div>
+    <div class="armour">
+      <div class="voted-info">
+        <div class="voted-info__wrapper">
+          <img src={nomineeSelected.image} alt={nomineeSelected.name} class="voted-info__picture"/>
+          <div class="voted-info-group">
+            <div class="voted-info__name">{nomineeSelected.name}</div>
+            <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
+          </div>
+          <div class="voted-info__desc">Total Vote : 120</div>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 {/if}
