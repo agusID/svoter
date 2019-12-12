@@ -125,6 +125,10 @@
     height: 100vh;
     width: 100%;
     line-height: 1.2;
+    max-width: 500px;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
   }
 
   .helmet {
@@ -208,7 +212,11 @@
     width: 100%;
     height: 100vh;
     top: 0;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
     user-select: none;
+    max-width: 500px
   }
 
   .modal {
