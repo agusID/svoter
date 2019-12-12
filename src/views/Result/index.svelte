@@ -1,7 +1,7 @@
 
 <script>
   import { getImageSource } from '../Home/utils'
-  import { fade } from 'svelte/transition'
+  import { fade, fly } from 'svelte/transition'
   import { database } from '@config/firebase'
   import { Loader } from '@components'
 
@@ -15,9 +15,9 @@
     })
   })
 
-  let totalCount = [0, 0, 0]
-
-  $: nominees && (nominees.length > 0 && setInterval(counter, 500))
+  let totalCount = ['?', '?', '?']
+  let isStart = false
+  let isCountOver = false
 
   function counter() {
     if (nominees[0].count > totalCount[0])
@@ -26,7 +26,24 @@
       totalCount[1] = totalCount[1] + 1
     if (nominees[2].count > totalCount[2])
       totalCount[2] = totalCount[2] + 1
+
+    if (
+        nominees[0].count === totalCount[0] &&
+        nominees[1].count === totalCount[1] &&
+        nominees[2].count === totalCount[2]
+      )
+      isCountOver = true
   }
+
+  database.ref('app/start_count').on('value', snapshot => {
+    snapshot.forEach(function(childSnapshot) {
+      let childData = childSnapshot.val()
+      isStart = childData
+      if (isStart) totalCount = [0, 0, 0]
+    }) 
+  })
+
+  $: nominees && (isStart && (nominees.length > 0 && setInterval(counter, 500)))
 </script>
 
 <style>
@@ -128,31 +145,41 @@
     }
   }
 </style>
-
-<div class="container">
-  <img class="background" src={getImageSource('bg-desktop-voted.svg')} alt="background" />
-  <div class="content">
-    <div class="helmet">
-      RALALI UNSUNG HERO 2019 NOMINEE
-    </div>
-    {#if nominees}
-      <div class="armour" transition:fade={{duration: 200}}>      
-        {#each nominees as item, index}
-          <div class="nominee__item">
-            <img src={item.image} alt={item.name} class="nominee__item-picture" />
-            <div class="nominee__item-name">{item.name}</div>
-            <div class="nominee__item-position">{item.position}</div>
-            <div class="btn-group">
-              <div class="vote-count" class:zooming={nominees[index].count === totalCount[index]}>{totalCount[index]}</div>
-              <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
+{#if !isCountOver}
+  <div class="container">
+    <img class="background" transition:fade={{duration:200}} src={getImageSource('bg-desktop-voted.svg')} alt="background" />
+    <div class="content">
+      <div class="helmet">
+        RALALI UNSUNG HERO 2019 NOMINEE
+      </div>
+      {#if nominees}
+        <div class="armour" transition:fade={{duration: 200}}>      
+          {#each nominees as item, index}
+            <div class="nominee__item">
+              <img src={item.image} alt={item.name} class="nominee__item-picture" />
+              <div class="nominee__item-name">{item.name}</div>
+              <div class="nominee__item-position">{item.position}</div>
+              <div class="btn-group">
+                <div class="vote-count" class:zooming={nominees[index].count === totalCount[index]}>{totalCount[index]}</div>
+                <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
+              </div>
             </div>
-          </div>
-        {/each}
-      </div>
-    {:else}
-      <div class="loader-container">
-        <Loader />
-      </div>
-    {/if}
+          {/each}
+        </div>
+      {:else}
+        <div class="loader-container">
+          <Loader />
+        </div>
+      {/if}
+    </div>
   </div>
-</div>
+{:else}
+  <div class="container">
+    <img transition:fade class="background" src={getImageSource('bg-desktop-over.svg')} alt="background" />
+    <div class="content">
+      <div class="helmet" transition:fly={{y: 80}}>
+        RALALI UNSUNG HERO 2019
+      </div>
+    </div>
+  </div>
+{/if}
