@@ -17,11 +17,11 @@
 
   let totalCount = ['?', '?', '?']
   let isStart = false
-  let isCountOver = true
+  let isCountOver = false
   let nomineeSelected = {
-    unique_id: null,
-    name: null,
-    image: null,
+    name: '-',
+    image: '-',
+    count: '-',
   }
 
   function counter() {
@@ -38,6 +38,21 @@
         nominees[2].count === totalCount[2]
       )
       isCountOver = true
+  }
+
+  $: if (isCountOver) {
+    let max = nominees[0].count
+    nomineeSelected.image = nominees[0].image
+    nomineeSelected.name = nominees[0].name
+    nomineeSelected.count = nominees[0].count
+    nominees.forEach((item, idx) => {
+      if (max < item.count) {
+        max = item.count
+        nomineeSelected.image = item.image
+        nomineeSelected.name = item.name
+        nomineeSelected.count = item.count
+      }
+    })
   }
 
   database.ref('app/start_count').on('value', snapshot => {
@@ -166,6 +181,7 @@
     background-color: #ffffff;
     border-radius: 50%;
     animation: glow 2s ease-in-out infinite alternate;
+    overflow: hidden;
   }
 
   @keyframes glow {
@@ -245,7 +261,7 @@
             <div class="voted-info__name">{nomineeSelected.name}</div>
             <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
           </div>
-          <div class="voted-info__desc">Total Vote : 120</div>
+          <div class="voted-info__desc">Total Vote : {nomineeSelected.count}</div>
         </div>
       </div>
     </div>
