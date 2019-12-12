@@ -232,7 +232,7 @@
               <img src={item.image} alt={item.name} class="nominee__item-picture" />
               <div class="nominee__item-name">{item.name}</div>
               <div class="nominee__item-position">{item.position}</div>
-              <div class="btn-group">
+              <div class="btn-group" transition:fly={{delay: 250, y: 20}}>
                 <div class="vote-count" class:zooming={nominees[index].count === totalCount[index]}>{totalCount[index]}</div>
                 <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
               </div>
@@ -247,17 +247,17 @@
     </div>
   </div>
 {:else}
-  <div class="container">
-    <img transition:fly={{delay: 250, y: 50}} class="background" src={getImageSource('bg-desktop-over.svg')} alt="background" />
+  <div class="container" transition:fade>
+    <img class="background" src={getImageSource('bg-desktop-over.svg')} alt="background" />
     <div class="content">
-      <div class="helmet" transition:fly={{y: 80}}>
+      <div class="helmet" transition:fly={{delay: 1000, y: 80}}>
         RALALI UNSUNG HERO 2019
       </div>
     <div class="armour">
       <div class="voted-info">
         <div class="voted-info__wrapper">
           <img src={nomineeSelected.image} alt={nomineeSelected.name} class="voted-info__picture"/>
-          <div class="voted-info-group">
+          <div class="voted-info-group" transition:fly={{delay: 250, y: 20}}>
             <div class="voted-info__name">{nomineeSelected.name}</div>
             <img class="btn-empty" src="{getImageSource('btn-empty.png')}" alt="vote" />
           </div>
