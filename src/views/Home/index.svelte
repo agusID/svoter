@@ -24,9 +24,7 @@
   }
 
   const cookies = new Cookies()
-  
-  
-  const crowns = ['gold.png', 'silver.png', 'bronze.png']
+
   let temp = []
   const MAX_NOMINEES = 3
   
