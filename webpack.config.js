@@ -30,7 +30,7 @@ function Copy(files) {
  */
 function FileLoader({isModeProduction}) {
   return {
-    test: /\.(png|jpe?g|gif|svg|ico|mp3|wav|json)$/,
+    test: /\.(png|jpe?g|gif|ttf|svg|ico|mp3|wav|json)$/,
     use: [
       {
         loader: 'file-loader',
@@ -140,6 +140,7 @@ function webpackConfig(environment) {
         {from: appResolve('public/favicon.ico'), to: './'},
         {from: appResolve('public/manifest.json'), to: './'},
         {from: appResolve('public/icons/'), to: './icons/'},
+        {from: appResolve('public/fonts/KGInimitableOriginal.ttf'), to: './fonts/'},
       ]),
 
       new GenerateSW({
