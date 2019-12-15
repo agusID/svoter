@@ -8,7 +8,7 @@
 
 <Router {url}>
   <div>
-    <Route path="/" component={Home} />
-    <Route path="/result" component={Result} />
+    <Route path="/" component={Result} />
+    <Route path="/vote" component={Home} />
   </div>
 </Router>
