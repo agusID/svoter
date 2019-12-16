@@ -6,6 +6,22 @@
   import { Loader } from '@components'
 
   let nominees = null
+  let title = 'RALALI UNSUNG HERO 2019'
+  let title_nominee = 'RALALI UNSUNG HERO 2019 NOMINEE'
+  database.ref('app/title').on('value', snapshot => {
+    snapshot.forEach(function(childSnapshot) {
+      let childData = childSnapshot.val()
+      title = childData
+    }) 
+  })
+
+  database.ref('app/title_nominee').on('value', snapshot => {
+    snapshot.forEach(function(childSnapshot) {
+      let childData = childSnapshot.val()
+      title_nominee = childData
+    }) 
+  })
+
   let usersRef = database.ref('nominees')
   usersRef.on('value', function(snapshot) {
     nominees = []
@@ -223,7 +239,7 @@
     <img class="background" transition:fade={{duration:200}} src={getImageSource('bg-desktop-voted.svg')} alt="background" />
     <div class="content">
       <div class="helmet">
-        RALALI UNSUNG HERO 2019 NOMINEE
+        {title_nominee}
       </div>
       {#if nominees}
         <div class="armour" transition:fade={{duration: 200}}>      
@@ -251,7 +267,7 @@
     <img class="background" src={getImageSource('bg-desktop-over.svg')} alt="background" />
     <div class="content">
       <div class="helmet" transition:fly={{delay: 1000, y: 80}}>
-        RALALI UNSUNG HERO 2019
+        {title}
       </div>
     <div class="armour">
       <div class="voted-info">
