@@ -3,6 +3,8 @@
   import { getImageSource } from '../Home/utils'
   import { fade, fly } from 'svelte/transition'
   import { database } from '@config/firebase'
+  import * as firebase from 'firebase/app'
+  import 'firebase/firestore'
   import { Loader } from '@components'
 
   let nominees = null
@@ -32,6 +34,10 @@
   })
 
   let totalCount = ['?', '?', '?']
+  let count_1 = 0
+  let count_2 = 0
+  let count_3 = 0
+
   let isStart = false
   let isCountOver = false
   let nomineeSelected = {
@@ -41,34 +47,36 @@
   }
 
   function counter() {
-    if (nominees[0].count > totalCount[0])
+    if (count_1 > totalCount[0])
       totalCount[0] = totalCount[0] + 1
-    if (nominees[1].count > totalCount[1])
+    if (count_2 > totalCount[1])
       totalCount[1] = totalCount[1] + 1
-    if (nominees[2].count > totalCount[2])
+    if (count_3 > totalCount[2])
       totalCount[2] = totalCount[2] + 1
 
     if (
-        nominees[0].count === totalCount[0] &&
-        nominees[1].count === totalCount[1] &&
-        nominees[2].count === totalCount[2]
+        count_1 === totalCount[0] &&
+        count_2 === totalCount[1] &&
+        count_3 === totalCount[2]
       )
       isCountOver = true
   }
 
   $: if (isCountOver) {
-    let max = nominees[0].count
-    nomineeSelected.image = nominees[0].image
-    nomineeSelected.name = nominees[0].name
-    nomineeSelected.count = nominees[0].count
-    nominees.forEach((item, idx) => {
-      if (max < item.count) {
-        max = item.count
-        nomineeSelected.image = item.image
-        nomineeSelected.name = item.name
-        nomineeSelected.count = item.count
-      }
-    })
+    let winner = -1
+
+    let max = Math.max(count_1, count_2, count_3)
+    if (max == count_1)
+      winner = 0
+    else if (max == count_2)
+      winner = 1
+    else if (max == count_3)
+      winner = 2
+
+    nomineeSelected.image = nominees[winner].image
+    nomineeSelected.name = nominees[winner].name
+    nomineeSelected.count = max
+
   }
 
   database.ref('app/start_count').on('value', snapshot => {
@@ -79,7 +87,27 @@
     }) 
   })
 
-  $: nominees && (isStart && (nominees.length > 0 && setInterval(counter, 500)))
+  let isRetrived = false
+  $: if (isStart) {
+    const db = firebase.firestore()
+    let nomineesRef = db.collection('nominees')
+    let allCities = nomineesRef.get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, '=>', doc.data())
+          count_1 = doc.data().count1
+          count_2 = doc.data().count2
+          count_3 = doc.data().count3
+          isRetrived = true
+        })
+      })
+      .catch(err => {
+        console.log('Error getting documents', err)
+      })
+  }
+
+  $: nominees && (isStart && (nominees.length > 0 && isRetrived && setInterval(counter, 500)))
+
 </script>
 
 <style>
@@ -250,7 +278,13 @@
               <div class="nominee__item-name">{item.name}</div>
               <div class="nominee__item-position">{item.position}</div>
               <div class="btn-group" transition:fly={{delay: 250, y: 20}}>
-                <div class="vote-count" class:zooming={nominees[index].count === totalCount[index]}>{totalCount[index]}</div>
+                {#if index == 0}
+                  <div class="vote-count" class:zooming={count_1 === totalCount[index]}>{totalCount[index]}</div>
+                {:else if index == 1 }
+                  <div class="vote-count" class:zooming={count_2 === totalCount[index]}>{totalCount[index]}</div>
+                {:else if index == 2 }
+                  <div class="vote-count" class:zooming={count_3 === totalCount[index]}>{totalCount[index]}</div>
+                {/if}
                 <img class="btn-vote" src="{getImageSource('btn-empty.png')}" alt="vote" />
               </div>
             </div>
