@@ -232,6 +232,7 @@
   .voted-info__desc {
     text-align: center;
     margin-top: 10px;
+    font-size: 40px;
   }
 </style>
 {#if !isCountOver}
